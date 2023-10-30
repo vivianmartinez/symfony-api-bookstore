@@ -17,6 +17,14 @@ framework:
     #fragments: true
     php_errors:
         log: true
+    
+    serializer:
+        enabled: true
+        #mapping:
+           # paths: ['%kernel.project_dir%/config/serializer/']
+            #agregué estas dos líneas
+        circular_reference_handler: App\Serializer\HandleCircularReferences
+        enable_annotations: true
 
 when@test:
     framework:
