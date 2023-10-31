@@ -36,4 +36,13 @@ class BookNormalizer implements NormalizerInterface
     {
         return $data instanceof Book;
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            'object' => null,             // Doesn't support any classes or interfaces
+            '*' => false,                 // Supports any other types, but the result is not cacheable
+            Book::class => true, // Supports MyCustomClass and result is cacheable
+        ];
+    }
 }

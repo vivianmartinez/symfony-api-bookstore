@@ -146,4 +146,20 @@ class BookController extends AbstractFOSRestController
         return $this->json($book,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES=>['id','title','description','picture','price','author'=>['id','name'],'category'=>['id','name'],'createdAt']]);
     
     }
+
+    //delete book
+    #[Rest\Delete(path:'/book/delete/{id}',name:'app_book_delete')]
+    #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
+    public function deleteBook(Book $book = null)
+    {
+        if($book == null){
+            $error = ['error'=>true,'message'=>'The book is not found.'];
+            return $this->json($error,Response::HTTP_NOT_FOUND);
+        }
+
+        $this->em->remove($book);
+        $this->em->flush();
+        $result = ['error'=>false,'message'=>'Book deleted succesfully.'];
+        return $this->json($result,Response::HTTP_OK);
+    }
 }

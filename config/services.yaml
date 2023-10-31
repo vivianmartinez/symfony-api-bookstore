@@ -22,6 +22,7 @@ services:
             - '../src/Form/Model/'
 
     # add more service definitions when explicit configuration is needed
-
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
     # please note that last definitions always *replace* previous ones
