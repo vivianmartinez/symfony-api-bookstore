@@ -1,0 +1,11 @@
+App\Entity\Book:
+    properties:
+        title:
+            - NotBlank: ~
+        price:
+            - NotBlank: ~
+        author:
+            - NotBlank: ~
+        category:
+            - NotBlank: ~
+    
