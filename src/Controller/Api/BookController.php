@@ -8,6 +8,7 @@ use App\Form\Model\BookDto;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
+use App\Service\UploadFile;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -25,12 +26,18 @@ class BookController extends AbstractFOSRestController
     private $em;
     private $authorRepository;
     private $categoryRepository;
+    private $uploadFile;
 
-    public function __construct(EntityManagerInterface $em, AuthorRepository $authorRepository, CategoryRepository $categoryRepository )
+    public function __construct(
+        EntityManagerInterface $em, 
+        AuthorRepository $authorRepository, 
+        CategoryRepository $categoryRepository, 
+        UploadFile $uploadFile )
     {
         $this->em = $em;
         $this->authorRepository   = $authorRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->uploadFile = $uploadFile;
     }
 
     //Route list all books
@@ -60,7 +67,12 @@ class BookController extends AbstractFOSRestController
             $book = new Book();
             $book->setTitle($bookDto->title);
             $book->setDescription($bookDto->description);
-            $book->setPicture($bookDto->picture);
+            //if send image
+            if($bookDto->imageBase64){
+                $path = $this->uploadFile->uploadImageBase64($bookDto->imageBase64);
+                $book->setPicture($path);
+            }
+
             $book->setPrice($bookDto->price);
             $author   = $this->authorRepository->find($bookDto->author);
             $category = $this->categoryRepository->find($bookDto->category);
@@ -122,8 +134,9 @@ class BookController extends AbstractFOSRestController
             $book->setPrice($bookDto->price);
         }
 
-        if($bookDto->picture){
-            $book->setPicture($bookDto->picture);
+        if($bookDto->imageBase64){
+            $path = $this->uploadFile->uploadImageBase64($bookDto->imageBase64);
+            $book->setPicture($path);
         }
 
         $book->setCreatedAt(new \DateTime('now'));

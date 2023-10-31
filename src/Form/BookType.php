@@ -20,7 +20,7 @@ class BookType extends AbstractType
             ->add('title', TextType::class) //validation not blank in config/validator/Book.yaml
             ->add('description', TextType::class)
             ->add('price', NumberType::class)
-            ->add('picture', TextType::class)
+            ->add('imageBase64', TextType::class)
             ->add('author')
             ->add('category')
         ;
