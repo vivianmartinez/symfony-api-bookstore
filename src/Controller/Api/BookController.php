@@ -27,6 +27,7 @@ class BookController extends AbstractFOSRestController
     private $authorRepository;
     private $categoryRepository;
     private $uploadFile;
+    private $context;
 
     public function __construct(
         EntityManagerInterface $em, 
@@ -38,6 +39,7 @@ class BookController extends AbstractFOSRestController
         $this->authorRepository   = $authorRepository;
         $this->categoryRepository = $categoryRepository;
         $this->uploadFile = $uploadFile;
+        $this->context = [AbstractNormalizer::ATTRIBUTES => ['id', 'title','description','price','picture','author'=>['id','name'],'category'=>['id','name']]];
     }
 
     //Route list all books
@@ -47,7 +49,7 @@ class BookController extends AbstractFOSRestController
     public function index(BookRepository $bookRepository): JsonResponse
     {
         $books = $bookRepository->findAll();
-        return $this->json($books,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES => ['id', 'title','description','picture', 'author'=>['id','name'],'category'=>['id','name']]]);
+        return $this->json($books,Response::HTTP_OK,[],$this->context);
     }
 
     //Create book
@@ -82,7 +84,7 @@ class BookController extends AbstractFOSRestController
             $this->em->persist($book);
             $this->em->flush();
     
-            return $this->json($book,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES =>['id','title','description','picture','author'=>['id','name'],'category'=>['id','name'],'createdAt']]);
+            return $this->json($book,Response::HTTP_OK,[],$this->context);
         }
         return $form;      
     }
@@ -143,7 +145,7 @@ class BookController extends AbstractFOSRestController
         $this->em->persist($book);
         $this->em->flush();
 
-        return $this->json($book,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES=>['id','title','description','picture','price','author'=>['id','name'],'category'=>['id','name'],'createdAt']]);
+        return $this->json($book,Response::HTTP_OK);
     
     }
 

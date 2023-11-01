@@ -2,6 +2,7 @@
 
 namespace App\Serializer;
 
+
 class HandleCircularReferences{
 
     public function __invoke($object)

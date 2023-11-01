@@ -31,7 +31,8 @@ class AuthorController extends AbstractFOSRestController
     public function index(): JsonResponse
     {
         $authors = $this->em->getRepository(Author::class)->findAll();
-        return $this->json($authors,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES=>['id','name','books'=>['id','title']]]);
+        $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','category'=>['id','name']]]];
+        return $this->json($authors,Response::HTTP_OK,[],$context);
     }
 
     // create an author

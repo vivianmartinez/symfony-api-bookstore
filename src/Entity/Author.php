@@ -6,6 +6,9 @@ use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
@@ -13,12 +16,15 @@ class Author
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['author'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['author'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Book::class, orphanRemoval: true)]
+    #[Groups(['book'])]
     private Collection $books;
 
     public function __construct()
