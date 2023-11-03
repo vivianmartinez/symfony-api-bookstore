@@ -1,5 +1,7 @@
 # Symfony API Rest Bookstore  FOSRestBundle
 
+I'm currently working on this project... 
+
 Project generated with [Symfony CLI](https://symfony.com/download) version 6.3.7
 
 ## Development server
