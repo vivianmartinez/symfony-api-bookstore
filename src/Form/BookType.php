@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Book;
 use App\Form\Model\BookDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,13 @@ class BookType extends AbstractType
             ->add('imageBase64', TextType::class)
             ->add('author')
             ->add('category')
+            ->add('tags', CollectionType::class,
+                array(
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'entry_type' => TagType::class
+                )
+            )
         ;
     }
 

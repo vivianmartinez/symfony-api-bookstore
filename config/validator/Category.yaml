@@ -1,0 +1,8 @@
+App\Entity\Category:
+    properties:
+        name:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/[a-zA-ZñÑ\-\s]+[\d]*/i'
+                match:   true
+                message: Probably you entered an invalid name

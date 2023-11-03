@@ -21,6 +21,8 @@ class TagRepository extends ServiceEntityRepository
         parent::__construct($registry, Tag::class);
     }
 
+    
+
 //    /**
 //     * @return Tag[] Returns an array of Tag objects
 //     */
@@ -36,13 +38,14 @@ class TagRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Tag
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findOneByName($value): ?array
+   {
+        return $this->createQueryBuilder('t')
+           ->select('t.id','t.name')
+           ->andWhere('t.name = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+    }
 }
