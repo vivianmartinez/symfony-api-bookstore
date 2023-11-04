@@ -21,9 +21,12 @@ class AddTags{
     {
         //get all current tags in book
         $current_tags_book = [];
-        foreach($bookTags as $bookTag){
-            array_push($current_tags_book,$bookTag->getId());
+        if(!empty($bookTags)){
+            foreach($bookTags as $bookTag){
+                array_push($current_tags_book,$bookTag->getId());
+            }
         }
+        
         $error = null;
         $addTag = null;
         //validate if send correct data

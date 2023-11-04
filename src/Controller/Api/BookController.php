@@ -3,50 +3,36 @@
 namespace App\Controller\Api;
 
 use App\Entity\Book;
-use App\Entity\Tag;
 use App\Form\BookType;
 use App\Form\Model\BookDto;
-use App\Form\Model\TagDto;
-use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\TagRepository;
-use App\Service\AddTags;
-use App\Service\UploadFile;
+use App\Service\BookFormRequestManager;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-
 
 
 class BookController extends AbstractFOSRestController
 {
-
     private $em;
-    private $authorRepository;
-    private $categoryRepository;
     private $tagRepository;
-    private $uploadFile;
+    private $bookFormRequestManager;
     private $context;
 
     public function __construct(
         EntityManagerInterface $em, 
-        AuthorRepository $authorRepository, 
-        CategoryRepository $categoryRepository,
         TagRepository $tagRepository, 
-        UploadFile $uploadFile )
+        BookFormRequestManager $bookFormRequestManager    
+    )
     {
         $this->em = $em;
-        $this->authorRepository   = $authorRepository;
-        $this->categoryRepository = $categoryRepository;
-        $this->tagRepository      = $tagRepository;
-        $this->uploadFile         = $uploadFile;
+        $this->tagRepository = $tagRepository;
+        $this->bookFormRequestManager = $bookFormRequestManager;
         $this->context = [AbstractNormalizer::ATTRIBUTES => ['id', 'title','description','price','picture','author'=>['id','name'],'category'=>['id','name'],'tags'=>['id','name']]];
     }
 
@@ -65,111 +51,27 @@ class BookController extends AbstractFOSRestController
     #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
     public function createBook(Request $request)
     {
-        $bookDto = new BookDto();
-        $form = $this->createForm(BookType::class,$bookDto);
-        $form->handleRequest($request);
-        if(!$form->isSubmitted()){
-            return new Response('Empty data', Response::HTTP_BAD_REQUEST);
-        }
+        $book = new Book();
+        //use our service App\Service\BookFormRequestManager to create form and return the response
 
-        if($form->isValid())
-        {
-            $book = new Book();
-            $book->setTitle($bookDto->title);
-            $book->setDescription($bookDto->description);
-            //if send image
-            if($bookDto->imageBase64){
-                $path = $this->uploadFile->uploadImageBase64($bookDto->imageBase64);
-                $book->setPicture($path);
-            }
-
-            $book->setPrice($bookDto->price);
-            $author   = $this->authorRepository->find($bookDto->author);
-            $category = $this->categoryRepository->find($bookDto->category);
-            $book->setAuthor($author);
-            $book->setCategory($category);
-            $book->setCreatedAt(new \DateTime('now'));
-            $this->em->persist($book);
-            $this->em->flush();
-    
-            return $this->json($book,Response::HTTP_OK,[],$this->context);
-        }
-        return $form;      
+        [$book,$response_status] = ($this->bookFormRequestManager)($book,$request);
+        return $this->json($book,$response_status,[],$this->context);
     }
 
     //Update Book
     #[Rest\Patch(path:'/book/update/{id}',name: 'app_book_update')]
     #[Rest\View(serializerGroups:['book'], serializerEnableMaxDepthChecks:true)]
 
-    public function updateBook(Book $book = null, Request $request, AddTags $addTags)
+    public function updateBook(Book $book = null, Request $request)
     {
         if($book == null){
             $error = ['error'=>true,'message'=>'The book is not found.'];
             return $this->json($error,Response::HTTP_NOT_FOUND);
         }
+        //use our service App\Service\BookFormRequestManager to create form and return the response
+        [$book,$response_status] = ($this->bookFormRequestManager)($book,$request);
 
-        $bookDto = new BookDto();
-        $form = $this->createForm(BookType::class,$bookDto,['method'=>$request->getMethod()]);
-        $form->handleRequest($request);
-
-        if(!$form->isSubmitted()){
-            return new Response('Empty data', Response::HTTP_BAD_REQUEST);
-        }
-
-        if($bookDto->title){
-            $book->setTitle($bookDto->title);
-        }
-        if($bookDto->description){
-            $book->setDescription($bookDto->description);
-        }
-        if($bookDto->author){
-            $author = $this->authorRepository->find($bookDto->author);
-            if(!$author){
-                $error = ['error'=>true,'message'=>'The author is not found.'];
-                return $this->json($error,Response::HTTP_NOT_FOUND);
-            }
-            $book->setAuthor($author);
-        }
-        if($bookDto->category){
-            $category = $this->categoryRepository->find($bookDto->category);
-            if(!$category){
-                $error = ['error'=>true,'message'=>'The category is not found.'];
-                return $this->json($error,Response::HTTP_NOT_FOUND);
-            }
-            $book->setCategory($category);
-        }
-    
-        if($bookDto->price){
-            $book->setPrice($bookDto->price);
-        }
-
-        if($bookDto->imageBase64){
-            $path = $this->uploadFile->uploadImageBase64($bookDto->imageBase64);
-            $book->setPicture($path);
-        }
-
-        // if send tags
-        if($bookDto->tags){
-            foreach($bookDto->tags as $tagDto){
-                //use custom service addTags 
-                $tag_add = $addTags->addTagsBook($book->getTags(),$tagDto);
-
-                if($tag_add['error'] !== null){
-                    return $this->json($tag_add['error'],Response::HTTP_FORBIDDEN);
-                }
-
-                // if there is value on addTag add tag to book
-                if($tag_add['add_tag'] !== null){
-                    $book->addTag($tag_add['add_tag']);
-                }
-            }
-        }
-
-        $this->em->persist($book);
-        $this->em->flush($book);
-
-        return $this->json($book,Response::HTTP_OK,[],$this->context);
-    
+        return $this->json($book,$response_status,[],$this->context);    
     }
 
     //delete book
