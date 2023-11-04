@@ -11,6 +11,7 @@ use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\TagRepository;
+use App\Service\AddTags;
 use App\Service\UploadFile;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -100,9 +101,9 @@ class BookController extends AbstractFOSRestController
     #[Rest\Patch(path:'/book/update/{id}',name: 'app_book_update')]
     #[Rest\View(serializerGroups:['book'], serializerEnableMaxDepthChecks:true)]
 
-    public function updateBook(Book $book = null, Request $request)
+    public function updateBook(Book $book = null, Request $request, AddTags $addTags)
     {
-        if($book === null){
+        if($book == null){
             $error = ['error'=>true,'message'=>'The book is not found.'];
             return $this->json($error,Response::HTTP_NOT_FOUND);
         }
@@ -149,55 +150,17 @@ class BookController extends AbstractFOSRestController
 
         // if send tags
         if($bookDto->tags){
-            //get all current tags in this book
-            $current_tags_book = [];
-            foreach($book->getTags() as $bookTag){
-                array_push($current_tags_book,$bookTag->getId());
-            }
-
             foreach($bookDto->tags as $tagDto){
-                //validate if send correct data
-                if($tagDto->id == null && $tagDto->name == null){
-                    $error = ['error'=>true,'message'=>'You must enter the tag id to add a tag to book or send name to create a new tag'];
-                    return $this->json($error,Response::HTTP_FORBIDDEN);
-                }else if($tagDto->id !== null && $tagDto->name !== null){
-                    $error = ['error'=>true,'message'=>'Bad request. If tag exist send id or create a new tag sending only name'];
-                    return $this->json($error,Response::HTTP_FORBIDDEN);
+                //use custom service addTags 
+                $tag_add = $addTags->addTagsBook($book->getTags(),$tagDto);
+
+                if($tag_add['error'] !== null){
+                    return $this->json($tag_add['error'],Response::HTTP_FORBIDDEN);
                 }
-                $addTag = null;
-                // if send id verify if exists on Tag
-                if($tagDto->id){
-                    $tag = $this->tagRepository->find($tagDto->id);
-                    if(!$tag){
-                        $error = ['error'=>true,'message'=>'Bad request. The tag not exists. Verify Id or create a new tag.'];
-                        return $this->json($error,Response::HTTP_FORBIDDEN);
-                    }elseif(!in_array($tagDto->id,$current_tags_book)){
-                        //if id exists on Tag and not exists in book->getTags() we add the tag to the book
-                        $addTag = $tag;
-                        /*
-                        $error = ['error'=>true,'message'=>'Bad request. The tag even exists on this book.'];
-                        return $this->json($error,Response::HTTP_FORBIDDEN);
-                        */
-                    }
-                    
-                }elseif($tagDto->name){   
-                    //verify if send name and that name doesn't exists on Tag
-                    $tag = $this->tagRepository->findOneByName($tagDto->name);
-                    //if name even exists return error
-                    if($tag){
-                        $error = ['error'=>true,'message'=>'The tag even exists on Tags. Assign it to your book sending id '. $tag['id']];
-                        return $this->json($error,Response::HTTP_FORBIDDEN);
-                    }
-                    //if there is no error we create the tag
-                    $newTag = new Tag();
-                    $newTag->setName($tagDto->name);
-                    $this->em->persist($newTag);
-                    $this->em->flush($newTag);
-                    $addTag = $newTag;
-                }
+
                 // if there is value on addTag add tag to book
-                if($addTag !== null){
-                    $book->addTag($addTag);
+                if($tag_add['add_tag'] !== null){
+                    $book->addTag($tag_add['add_tag']);
                 }
             }
         }
