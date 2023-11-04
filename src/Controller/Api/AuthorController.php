@@ -28,11 +28,24 @@ class AuthorController extends AbstractFOSRestController
     //get all authors
     #[Rest\Get('/authors', name: 'app_authors')]
     #[Rest\View(serializerGroups:['author'],serializerEnableMaxDepthChecks:true)]
-    public function index(): JsonResponse
+    public function getAll(): JsonResponse
     {
         $authors = $this->em->getRepository(Author::class)->findAll();
         $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','category'=>['id','name']]]];
         return $this->json($authors,Response::HTTP_OK,[],$context);
+    }
+
+    //get single author
+    #[Rest\Get('/author/{id}', name: 'app_single_author')]
+    #[Rest\View(serializerGroups:['author'],serializerEnableMaxDepthChecks:true)]
+    public function getSingle(Author $author = null): JsonResponse
+    {
+        if($author == null){
+            $error = ['error'=>true,'message'=>'The author is not found.'];
+            return $this->json($error,Response::HTTP_NOT_FOUND);
+        }
+        $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','category'=>['id','name']]]];
+        return $this->json($author,Response::HTTP_OK,[],$context);
     }
 
     // create an author

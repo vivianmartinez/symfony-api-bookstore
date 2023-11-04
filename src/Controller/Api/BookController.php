@@ -40,10 +40,23 @@ class BookController extends AbstractFOSRestController
 
     #[Rest\Get(path:'/books', name: 'app_books')]
     #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
-    public function index(BookRepository $bookRepository): JsonResponse
+    public function getAll(BookRepository $bookRepository): JsonResponse
     {
         $books = $bookRepository->findAll();
         return $this->json($books,Response::HTTP_OK,[],$this->context);
+    }
+
+    //Route get single book
+
+    #[Rest\Get(path:'/book/{id}', name: 'app_single_book')]
+    #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
+    public function getSingle(Book $book = null): JsonResponse
+    {
+        if($book == null){
+            $error = ['error'=>true,'message'=>'The book is not found.'];
+            return $this->json($error,Response::HTTP_NOT_FOUND);
+        }
+        return $this->json($book,Response::HTTP_OK,[],$this->context);
     }
 
     //Create book

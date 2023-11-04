@@ -26,11 +26,24 @@ class CategoryController extends AbstractController
     //list all categories
     #[Rest\Get('/categories', name: 'app_categories')]
     #[Rest\View(serializerGroups:['category'],serializerEnableMaxDepthChecks:true)]
-    public function index(): JsonResponse
+    public function getAll(): JsonResponse
     {
         $categories = $this->em->getRepository(Category::class)->findAll();
         $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','author'=>['id','name']]]];
         return $this->json($categories,Response::HTTP_OK,[],$context);
+    }
+
+    //get single category
+    #[Rest\Get('/category/{id}', name: 'app_single_category')]
+    #[Rest\View(serializerGroups:['category'],serializerEnableMaxDepthChecks:true)]
+    public function getSingle(Category $category = null): JsonResponse
+    {
+        if($category == null){
+            $error = ['error'=>true,'message'=>'The category is not found.'];
+            return $this->json($error,Response::HTTP_NOT_FOUND);
+        }
+        $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','author'=>['id','name']]]];
+        return $this->json($category,Response::HTTP_OK,[],$context);
     }
 
     // create category
