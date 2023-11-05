@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Author;
+use App\Form\Model\AuthorDto;
 use App\Form\AuthorType;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -53,8 +54,8 @@ class AuthorController extends AbstractFOSRestController
     #[Rest\View(serializerGroups:['author'], serializerEnableMaxDepthChecks:true)]
     public function createAuthor(Request $request)
     {
-        $author = new Author();
-        $form = $this->createForm(AuthorType::class,$author);
+        $authorDto = new AuthorDto();
+        $form = $this->createForm(AuthorType::class,$authorDto);
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
@@ -65,6 +66,8 @@ class AuthorController extends AbstractFOSRestController
         if(!$form->isValid()){
             return $form;
         }
+        $author = new Author();
+        $author->setName($authorDto->name);
         $this->em->persist($author);
         $this->em->flush();
 
@@ -81,8 +84,8 @@ class AuthorController extends AbstractFOSRestController
             $error = ['error'=>'true','message'=>'Author not found'];
             return $this->json($error,Response::HTTP_NOT_FOUND);
         }
-
-        $form = $this->createForm(AuthorType::class,$author,['method'=>$request->getMethod()]);
+        $authorDto = new AuthorDto();
+        $form = $this->createForm(AuthorType::class,$authorDto,['method'=>$request->getMethod()]);
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
@@ -92,6 +95,9 @@ class AuthorController extends AbstractFOSRestController
 
         if(!$form->isValid()){
             return $form;
+        }
+        if($authorDto->name){
+            $author->setName($authorDto->name);
         }
         $this->em->persist($author);
         $this->em->flush();

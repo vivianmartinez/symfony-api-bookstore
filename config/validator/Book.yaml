@@ -1,8 +1,0 @@
-App\Entity\Book:
-    properties:
-        title:
-            - NotBlank: ~
-        author:
-            - NotBlank: ~
-        category:
-            - NotBlank: ~

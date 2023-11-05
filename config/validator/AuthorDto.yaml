@@ -1,0 +1,4 @@
+App\Form\Model\AuthorDto:
+    properties:
+        name:
+            - NotBlank: ~

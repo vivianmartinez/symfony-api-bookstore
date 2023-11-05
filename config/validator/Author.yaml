@@ -1,5 +1,0 @@
-App\Entity\Author:
-    properties:
-        name:
-            - NotBlank: ~
-            - Type: string
