@@ -63,7 +63,7 @@ class BookFormRequestManager{
         $form = $this->formFactoryInterface->create(BookType::class,$bookDto);
         $form->handleRequest($request);
         if(!$form->isSubmitted()){
-            $error = ['error'=> true,'message'=>'Empty data.'];
+            $error = ['error'=> true,'message'=>'Invalid data.'];
             return [$error, Response::HTTP_BAD_REQUEST];
         }
 
@@ -125,7 +125,7 @@ class BookFormRequestManager{
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
-            $error = ['error'=> true,'message'=>'Empty data.'];
+            $error = ['error'=> true,'message'=>'Invalid data.'];
             return [$error, Response::HTTP_BAD_REQUEST];
         }
 

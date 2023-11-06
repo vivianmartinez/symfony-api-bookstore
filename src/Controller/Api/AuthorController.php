@@ -7,14 +7,12 @@ use App\Form\Model\AuthorDto;
 use App\Form\AuthorType;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+
 
 class AuthorController extends AbstractFOSRestController
 {
@@ -59,7 +57,7 @@ class AuthorController extends AbstractFOSRestController
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
-            $error = ['error' => true, 'message'=>'Empty data'];
+            $error = ['error' => true, 'message'=>'Invalid data'];
             return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
@@ -71,8 +69,7 @@ class AuthorController extends AbstractFOSRestController
         $this->em->persist($author);
         $this->em->flush();
 
-        return $this->json($author,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES=>['id','name']]);
-
+        return $author;
     }
 
     //update author
@@ -89,25 +86,25 @@ class AuthorController extends AbstractFOSRestController
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
-            $error = ['error' => true, 'message'=>'Empty data'];
+            $error = ['error' => true, 'message'=>'Invalid data'];
             return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
         if(!$form->isValid()){
             return $form;
         }
-        if($authorDto->name){
-            $author->setName($authorDto->name);
-        }
+
+        $author->setName($authorDto->name);
         $this->em->persist($author);
         $this->em->flush();
-        return $this->json($author,Response::HTTP_OK,[],[AbstractNormalizer::ATTRIBUTES=>['id','name']]);
+
+        return $author;
     }
 
     //delete author
     #[Rest\Delete(path:'/author/delete/{id}', name:'app_author_delete')]
     #[Rest\View(serializerGroups:['author'],serializerEnableMaxDepthChecks:true)]
-    public function deleteAuthor(Author $author = null)
+    public function deleteAuthor(Author $author = null):JsonResponse
     {
         if($author == null){
             $error = ['error'=>'true','message'=>'Author not found'];

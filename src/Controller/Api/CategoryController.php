@@ -6,22 +6,22 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 
-class CategoryController extends AbstractController
+class CategoryController extends AbstractFOSRestController
 {
     private $em;
+    private $context;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+        $this->context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','author'=>['id','name']]]];
     }
     //list all categories
     #[Rest\Get('/categories', name: 'app_categories')]
@@ -29,8 +29,7 @@ class CategoryController extends AbstractController
     public function getAll(): JsonResponse
     {
         $categories = $this->em->getRepository(Category::class)->findAll();
-        $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','author'=>['id','name']]]];
-        return $this->json($categories,Response::HTTP_OK,[],$context);
+        return $this->json($categories,Response::HTTP_OK,[],$this->context);
     }
 
     //get single category
@@ -42,8 +41,7 @@ class CategoryController extends AbstractController
             $error = ['error'=>true,'message'=>'The category is not found.'];
             return $this->json($error,Response::HTTP_NOT_FOUND);
         }
-        $context = [AbstractNormalizer::ATTRIBUTES => ['id','name','books'=>['id','title','description','picture','price','author'=>['id','name']]]];
-        return $this->json($category,Response::HTTP_OK,[],$context);
+        return $this->json($category,Response::HTTP_OK,[],$this->context);
     }
 
     // create category
@@ -56,7 +54,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if(!$form->isSubmitted()){
-            $error = ['error' => true, 'message'=>'Empty data'];
+            $error = ['error' => true, 'message'=>'Invalid data'];
             return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
@@ -67,7 +65,7 @@ class CategoryController extends AbstractController
         $this->em->persist($category);
         $this->em->flush();
 
-        return $this->json($category,Response::HTTP_OK,[],[AbstractNormalizer::IGNORED_ATTRIBUTES =>['books']]);
+        return $category;
     }
 
     //update category
@@ -83,9 +81,8 @@ class CategoryController extends AbstractController
         $form = $this->createForm(CategoryType::class,$category,['method' => $request->getMethod()]);
         $form->handleRequest($request);
 
-
         if(!$form->isSubmitted()){
-            $error = ['error' => true, 'message'=>'Empty data'];
+            $error = ['error' => true, 'message'=>'Invalid data'];
             return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
@@ -96,13 +93,13 @@ class CategoryController extends AbstractController
         $this->em->persist($category);
         $this->em->flush();
 
-        return $this->json($category,Response::HTTP_OK,[],[AbstractNormalizer::IGNORED_ATTRIBUTES =>['books']]);
+        return $category;
     }
 
     //delete category
     #[Rest\Delete(path:'/category/delete/{id}',name:'app_category_delete')]
     #[Rest\View(serializerGroups:['category'],serializerEnableMaxDepthChecks:true)]
-    public function deleteCategory(Category $category = null)
+    public function deleteCategory(Category $category = null):JsonResponse
     {
         if($category == null){
             $error = ['error'=>'true','message'=>'Category not found'];

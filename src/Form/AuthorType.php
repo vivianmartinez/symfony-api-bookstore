@@ -16,7 +16,10 @@ class AuthorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class,array('constraints'=>[new Length(['min' => 3,'max' => 250,'minMessage'=>'The name nust be at least 3 characters long','maxMessage'=>'The name cannot be longer than 250 characters'])]))
+            ->add('name', TextType::class,array('constraints'=>[new Length(
+                                                ['min' => 5,
+                                                'max' => 250,
+                                                'minMessage'=>'The name must be at least 5 characters long','maxMessage'=>'The name cannot be longer than 250 characters'])]))
         ;
     }
 

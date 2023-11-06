@@ -2,7 +2,7 @@
 
 namespace App\Form\Model;
 
-use App\Validator\UniqueAuthor;
+use App\Validator\UniqueAuthor; //to use validator unique name author
 
 
 class AuthorDto

@@ -62,7 +62,7 @@ class BookController extends AbstractFOSRestController
     //Create book
     #[Rest\Post(path:'/book/create',name:'app_book_create')]
     #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
-    public function createBook(Request $request)
+    public function createBook(Request $request): JsonResponse
     {
         $book = new Book();
         //use our service App\Service\BookFormRequestManager to create form and return the response
@@ -75,7 +75,7 @@ class BookController extends AbstractFOSRestController
     #[Rest\Patch(path:'/book/update/{id}',name: 'app_book_update')]
     #[Rest\View(serializerGroups:['book'], serializerEnableMaxDepthChecks:true)]
 
-    public function updateBook(Book $book = null, Request $request)
+    public function updateBook(Book $book = null, Request $request): JsonResponse
     {
         if($book == null){
             $error = ['error'=>true,'message'=>'The book is not found.'];
@@ -90,7 +90,7 @@ class BookController extends AbstractFOSRestController
     //delete book
     #[Rest\Delete(path:'/book/delete/{id}',name:'app_book_delete')]
     #[Rest\View(serializerGroups:['book'],serializerEnableMaxDepthChecks:true)]
-    public function deleteBook(Book $book = null)
+    public function deleteBook(Book $book = null): JsonResponse
     {
         if($book == null){
             $error = ['error'=>true,'message'=>'The book is not found.'];
@@ -106,7 +106,7 @@ class BookController extends AbstractFOSRestController
     //delete tags of book
     #[Rest\Patch(path:'/book/{id}/delete/tags', name: 'app_delete_tags_book', requirements:['id'=>'\d+'])]
     #[Rest\View(serializerGroups:['book'], serializerEnableMaxDepthChecks:true)]
-    public function deleteTagBook(Book $book = null,Request $request)
+    public function deleteTagBook(Book $book = null,Request $request): JsonResponse
     {
         if($book == null){
             $error = ['error'=>true,'message'=>'The book is not found.'];
@@ -117,7 +117,8 @@ class BookController extends AbstractFOSRestController
         $form = $this->createForm(BookType::class, $bookDto,['method' => $request->getMethod()]);
         $form->handleRequest($request);
         if(!$form->isSubmitted()){
-            return new Response('Empty data', Response::HTTP_BAD_REQUEST);
+            $error = ['error' => true, 'message'=>'Invalid data'];
+            return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
         if($bookDto->tags){
