@@ -23,6 +23,13 @@ class ApiToken
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    public function __construct(User $user)
+    {
+        $this->token = bin2hex(openssl_random_pseudo_bytes(100));
+        $this->user  = $user;
+        $this->expiresAt = new \DateTime('+1 hour');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
