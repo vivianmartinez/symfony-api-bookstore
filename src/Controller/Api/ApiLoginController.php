@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class ApiLoginController extends AbstractFOSRestController
 {
     private $em;
-    public function __construct(EntityManagerInterface $entityManagerInterface)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->em = $entityManagerInterface;
+        $this->em = $em;
     }
 
     #[Rest\Post('/login', name: 'app_api_login')]
