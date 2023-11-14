@@ -49,7 +49,7 @@ class TagController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
-    //update tag
+    //create tag
     #[Rest\Post('/tag/create', name: 'app_create_tag')]
     #[Rest\View(serializerGroups:['tag'], serializerEnableMaxDepthChecks: true)]
     public function createTag(Request $request)
