@@ -53,6 +53,5 @@ class UserController extends AbstractFOSRestController
         }else{
             return $form;
         }
-
     }
 }

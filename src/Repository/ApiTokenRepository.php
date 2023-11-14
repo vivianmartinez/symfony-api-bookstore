@@ -45,4 +45,13 @@ class ApiTokenRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+        public function findByTokenExpired($currentDate,$token)
+        {
+            return $this->createQueryBuilder('a')
+                    ->andWhere('a.token = :token','a.expiresAt > :current_date')
+                    ->setParameters(['token'=>$token,'current_date'=>$currentDate])
+                    ->getQuery()
+                    ->getOneOrNullResult();
+        }
 }
