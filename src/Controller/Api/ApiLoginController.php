@@ -32,7 +32,7 @@ class ApiLoginController extends AbstractFOSRestController
                 'message' => 'missing credentials'
             ],Response::HTTP_UNAUTHORIZED);
         }
-
+        //create api token for this user
         $apiToken = new ApiToken($user);
         $this->em->persist($apiToken);
         $this->em->flush();

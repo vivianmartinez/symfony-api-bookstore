@@ -34,7 +34,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-        
         $route = $request->attributes->get('_route');
 
         if(! $request->headers->has('X-AUTH-TOKEN')){
@@ -45,7 +44,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         }
         //if is true authenticate
         return true;
-
     }
     
     public function authenticate(Request $request): Passport

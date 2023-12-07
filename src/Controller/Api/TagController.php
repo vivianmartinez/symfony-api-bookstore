@@ -76,8 +76,6 @@ class TagController extends AbstractFOSRestController
 
         $view = $this->view($tag, Response::HTTP_OK);
         return $this->handleView($view);
-
-
     }
 
     //update tag
