@@ -27,6 +27,7 @@ class AuthorType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AuthorDto::class,
+            'csrf_protection' => false
         ]);
     }
 

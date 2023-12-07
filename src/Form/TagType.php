@@ -17,11 +17,7 @@ class TagType extends AbstractType
     {
         $builder
             ->add('id')
-            ->add('name',TextType::class,array('constraints'=>[new NotBlank(), new Length([
-                                                                'min'=> 5,
-                                                                'max'=> 250,
-                                                                'minMessage'=>'The name must be at least 5 characters long','maxMessage'=>'The name cannot be longer than 250 characters'
-                                                                ])]))
+            ->add('name',TextType::class)
             //->add('books')
         ;
     }
@@ -30,6 +26,7 @@ class TagType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TagDto::class,
+            'csrf_protection' => false
         ]);
     }
 

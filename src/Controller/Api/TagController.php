@@ -64,8 +64,9 @@ class TagController extends AbstractFOSRestController
             return $this->json($error,Response::HTTP_NOT_FOUND);
         }
 
-        if(!$form->isValid()){
-            return $form;
+        if(!$tagDto->name){
+            $error = ['error'=>true,'message'=>'name tag shouldn\'t be blank.'];
+            return $this->json($error,Response::HTTP_BAD_REQUEST);
         }
 
         $tag = new Tag();
