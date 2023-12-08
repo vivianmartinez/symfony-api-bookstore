@@ -45,6 +45,7 @@ When user log receive an Authentication Token for secure access. The token will 
 
 #### Invalid Credentials if the token is wrong
 
+<img src="/readme-pictures/invalid-credentials.png" width="800">
 
 #### GET: Books
 To get list of books you must send header X-AUTH-TOKEN that you received after login.
