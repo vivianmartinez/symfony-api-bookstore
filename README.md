@@ -29,11 +29,22 @@ To register user, send json with username and password
 
 #### POST: Login
 
-When user log receive an Authentication Token for secure access.
+When user log receive an Authentication Token for secure access. The token will expire in one hour.
 ```
   http://127.0.0.1:8000/api/login
 ```
 <img src="/readme-pictures/post-login.png" width="800">
+
+#### Expired token
+
+<img src="/readme-pictures/expired-token.png" width="800">
+
+#### Not Api Token provided
+
+<img src="/readme-pictures/noapitoken-provided.png" width="800">
+
+#### Invalid Credentials if the token is wrong
+
 
 #### GET: Books
 To get list of books you must send header X-AUTH-TOKEN that you received after login.
@@ -79,7 +90,7 @@ You can add a tag or create one, To add a tag send the tag id, to create a tag a
 #### PATCH: Update Book
 To update a book specify the book id on the request and authenticate. You must send a json with modifications, you can add tags to the book or create the tags directly.
 ```
-  http://127.0.0.1:8000/api/book/update/12
+  http://127.0.0.1:8000/api/book/update/1
 ```
 Update book and add Tag - to add a tag send the id:
 
@@ -89,7 +100,7 @@ Update book and create tag - to create a new tag send the name:
 
 <img src="/readme-pictures/patch-book-create-tag.png" width="800">
 
-#### PATCH: Update Book - deleting tag 
+#### PATCH: Update Book - delete tag 
 If you want to delete a tag from a book you can make this request. You must send a json with the tags ids you want to delete.
 ```
   http://127.0.0.1:8000/api/book/12/delete/tags
@@ -101,6 +112,32 @@ To delete a book specify the book id on the request and authenticate.
 ```
   http://127.0.0.1:8000/api/book/delete/12
 ```
+
+#### GET: Authors
+```
+  http://127.0.0.1:8000/api/authors
+
+  //GET single author
+  http://127.0.0.1:8000/api/author/2
+```
+#### POST: Author
+```
+  http://127.0.0.1:8000/api/author/create
+```
+<img src="/readme-pictures/post-author.png" width="800">
+
+#### GET: Categories
+```
+  http://127.0.0.1:8000/api/categories
+
+  //GET single category
+  http://127.0.0.1:8000/api/category/2
+```
+#### POST: Category
+```
+  http://127.0.0.1:8000/api/category/create
+```
+<img src="/readme-pictures/post-category.png" width="800">
 
 ## Development server
 
