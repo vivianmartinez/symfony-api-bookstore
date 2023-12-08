@@ -40,21 +40,41 @@ To get list of books you must send header X-AUTH-TOKEN that you received after l
 ```
   http://127.0.0.1:8000/api/books
 ```
+<img src="/readme-pictures/get-books.png" width="800">
+
 #### GET: Single Book
-To get single book specify the book id on the request and authenticate. In this case, the book id is specified with 12.
+To get single book specify the book id on the request and authenticate. In this case, the book id is specified with 7.
 ```
-  http://127.0.0.1:8000/api/book/12
+  http://127.0.0.1:8000/api/book/7
 ```
+<img src="/readme-pictures/get-book-single.png" width="800">
+
+#### POST: Create Book
+
+```
+  http://127.0.0.1:8000/api/book/create
+```
+
 #### PATCH: Update Book
 To update a book specify the book id on the request and authenticate. You must send a json with modifications, you can add tags to the book or create the tags directly.
 ```
   http://127.0.0.1:8000/api/book/update/12
 ```
+Update book and add Tag - to add a tag send the id:
+
+<img src="/readme-pictures/patch-book.png" width="800">
+
+Update book and create tag - to create a new tag send the name:
+
+<img src="/readme-pictures/patch-book-create-tag.png" width="800">
+
 #### PATCH: Update Book - deleting tag 
 If you want to delete a tag from a book you can make this request. You must send a json with the tags ids you want to delete.
 ```
   http://127.0.0.1:8000/api/book/12/delete/tags
 ```
+<img src="/readme-pictures/delete-tag-book.png" width="800">
+
 #### DELETE: book
 To delete a book specify the book id on the request and authenticate. 
 ```
