@@ -25,14 +25,18 @@ To register user, send json with username and password
 ```
   http://127.0.0.1:8000/api/user/register
 ```
+<img src="/readme-pictures/post-user.png" width="800">
+
 #### POST: Login
 
-When user log receive an Authentication Token for secure access
+When user log receive an Authentication Token for secure access.
 ```
   http://127.0.0.1:8000/api/login
 ```
+<img src="/readme-pictures/post-login.png" width="800">
+
 #### GET: Books
-To get list of books you must send header X-AUTH-TOKEN that you received after login
+To get list of books you must send header X-AUTH-TOKEN that you received after login.
 ```
   http://127.0.0.1:8000/api/books
 ```
