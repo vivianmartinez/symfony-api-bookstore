@@ -42,9 +42,19 @@ To get single book specify the book id on the request and authenticate. In this 
   http://127.0.0.1:8000/api/book/12
 ```
 #### PATCH: Update Book
-To update a book specify the book id on the request and authenticate.
+To update a book specify the book id on the request and authenticate. You must send a json with modifications, you can add tags to the book or create the tags directly.
 ```
   http://127.0.0.1:8000/api/book/update/12
+```
+#### PATCH: Update Book - deleting tag 
+If you want to delete a tag from a book specify the book id on the request and authenticate. You must send a json with the tags ids you want to delete.
+```
+  http://127.0.0.1:8000/api/book/12/delete/tags
+```
+#### DELETE: book
+To delete a book specify the book id on the request and authenticate. 
+```
+  http://127.0.0.1:8000/api/book/delete/12
 ```
 
 ## Development server
