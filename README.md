@@ -127,7 +127,7 @@ To delete a book specify the book id on the request and authenticate.
 <img src="/readme-pictures/post-author.png" width="800">
 
 #### PATCH: Update Author
-To update Author send json with name modification.
+To update Author send json with name modification and specify author id.
 ```
   http://127.0.0.1:8000/api/author/update/10
 ```
@@ -146,7 +146,7 @@ To update Author send json with name modification.
 <img src="/readme-pictures/post-category.png" width="800">
 
 #### PATCH: Update Category
-To update Category send json with name modification.
+To update Category send json with name modification and specify category id.
 ```
   http://127.0.0.1:8000/api/category/update/3
 ```
