@@ -47,7 +47,7 @@ To update a book specify the book id on the request and authenticate. You must s
   http://127.0.0.1:8000/api/book/update/12
 ```
 #### PATCH: Update Book - deleting tag 
-If you want to delete a tag from a book specify the book id on the request and authenticate. You must send a json with the tags ids you want to delete.
+If you want to delete a tag from a book you can make this request. You must send a json with the tags ids you want to delete.
 ```
   http://127.0.0.1:8000/api/book/12/delete/tags
 ```
