@@ -32,11 +32,20 @@ When user log receive an Authentication Token for secure access
   http://127.0.0.1:8000/api/login
 ```
 #### GET: Books
-Get list of books. You must send header X-AUTH-TOKEN that you receive after login
+To get list of books you must send header X-AUTH-TOKEN that you received after login
 ```
   http://127.0.0.1:8000/api/books
 ```
-
+#### GET: Single Book
+To get single book specify the book id on the request and authenticate. In this case, the book id is specified with 12.
+```
+  http://127.0.0.1:8000/api/book/12
+```
+#### PATCH: Update Book
+To update a book specify the book id on the request and authenticate.
+```
+  http://127.0.0.1:8000/api/book/update/12
+```
 
 ## Development server
 
