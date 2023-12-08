@@ -132,7 +132,11 @@ To update Author send json with name modification and specify author id.
 ```
   http://127.0.0.1:8000/api/author/update/10
 ```
-
+#### DELETE: Delete Author
+To delete author specify author id. 
+```
+  http://127.0.0.1:8000/api/author/delete/17
+```
 #### GET: Categories
 ```
   http://127.0.0.1:8000/api/categories
@@ -150,6 +154,36 @@ To update Author send json with name modification and specify author id.
 To update Category send json with name modification and specify category id.
 ```
   http://127.0.0.1:8000/api/category/update/3
+```
+#### DELETE: Delete Category
+To delete category specify category id. 
+```
+  http://127.0.0.1:8000/api/category/delete/10
+```
+#### GET: Tags
+```
+  http://127.0.0.1:8000/api/tags
+
+  //GET single author
+  http://127.0.0.1:8000/api/tag/2
+```
+#### POST: Tag
+To create tag send json with tag name.
+```
+  http://127.0.0.1:8000/api/tag/create
+  {
+    "name": "name tag"
+  }
+```
+#### PATCH: Update Tag
+To update a tag send json with tag name modification.
+```
+  http://127.0.0.1:8000/api/tag/1
+```
+#### DELETE: Delete Tag
+To delete tag specify tag id. 
+```
+  http://127.0.0.1:8000/api/tag/delete/12
 ```
 
 ## Development server
