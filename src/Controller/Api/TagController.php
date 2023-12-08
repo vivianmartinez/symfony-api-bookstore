@@ -39,7 +39,7 @@ class TagController extends AbstractFOSRestController
     //get single tag
     #[Rest\Get('/tag/{id}', name: 'app_tag')]
     #[Rest\View(serializerGroups:['tag'], serializerEnableMaxDepthChecks: true)]
-    public function getSingle(Tag $tag = null): JsonResponse
+    public function getSingle(Tag $tag = null)
     {
         if($tag == null){
             $error = ['error'=>true,'message'=>'The tag is not found.'];
@@ -108,6 +108,20 @@ class TagController extends AbstractFOSRestController
 
         $view = $this->view($tag, Response::HTTP_OK);
         return $this->handleView($view);
+    }
+    //Delete tag
+    #[Rest\Delete(path:'/tag/delete/{id}',name:'app_tag_delete')]
+    #[Rest\View(serializerGroups:['tag'],serializerEnableMaxDepthChecks:true)]
+    public function deleteTag(Tag $tag = null): JsonResponse
+    {
+        if($tag == null){
+            $error = ['error'=>true,'message'=>'The tag is not found.'];
+            return $this->json($error,Response::HTTP_NOT_FOUND);
+        }
+        $this->em->remove($tag);
+        $this->em->flush();
+        $result = ['error'=>false,'message'=>'Tag deleted succesfully.'];
+        return $this->json($result,Response::HTTP_OK);
     }
 
 }
