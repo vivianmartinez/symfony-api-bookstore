@@ -51,9 +51,30 @@ To get single book specify the book id on the request and authenticate. In this 
 
 #### POST: Create Book
 
+To create a Book send json with data, title, price, author and category cannot be null. <br>
+To upload Image you must send the file coverted on base 64. <br>
+You can add a tag or create one, To add a tag send the tag id, to create a tag at the same time send a new tag name.
+
 ```
   http://127.0.0.1:8000/api/book/create
+
+  {
+      "title": "Name book",
+      "description": "description book",
+      "price": 00.00,
+      "author": 1,
+      "category": 1,
+      "tags":{
+          "0":{
+              "id": 1
+          },
+          "1":{
+              "name": "Name new tag"
+          }
+      }
+  }
 ```
+<img src="/readme-pictures/post-book-image.png" width="800">
 
 #### PATCH: Update Book
 To update a book specify the book id on the request and authenticate. You must send a json with modifications, you can add tags to the book or create the tags directly.
