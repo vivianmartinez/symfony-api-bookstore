@@ -35,20 +35,24 @@ When user log receive an Authentication Token for secure access. The token will 
 ```
 <img src="/readme-pictures/post-login.png" width="800">
 
-#### Expired token
+#### After Login use the Token to make requests. Here you have some of Token errors validations:
+
+Send the authentication Token **X-AUTH-TOKEN** in the **Headers**.
+
+##### Expired token
 
 <img src="/readme-pictures/expired-token.png" width="800">
 
-#### Not Api Token provided
+##### Not Api Token provided
 
 <img src="/readme-pictures/noapitoken-provided.png" width="800">
 
-#### Invalid Credentials if the token is wrong
+##### Invalid Credentials if the token is wrong
 
 <img src="/readme-pictures/invalid-credentials.png" width="800">
 
 #### GET: Books
-To get list of books you must send header X-AUTH-TOKEN that you received after login.
+To get list of books you must send header **X-AUTH-TOKEN** that you received after login.
 ```
   http://127.0.0.1:8000/api/books
 ```
@@ -113,7 +117,6 @@ To delete a book specify the book id on the request and authenticate.
 ```
   http://127.0.0.1:8000/api/book/delete/12
 ```
-
 #### GET: Authors
 ```
   http://127.0.0.1:8000/api/authors
