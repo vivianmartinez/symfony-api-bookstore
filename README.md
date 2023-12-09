@@ -20,8 +20,8 @@ Install symfony security-bundle
 ```
   $ composer require symfony/security-bundle
 ```
-Then to create a custom authenticator you can follow the instructions here: [How to write a Custom Authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
-or
+Then to create a custom authenticator you can follow the instructions here: [How to write a Custom Authenticator](https://symfony.com/doc/current/security/custom_authenticator.html) <br>
+or <br>
 Generate a form login [How to build a Login Form](https://symfony.com/doc/5.2/security/form_login_setup.html) and choose Empty Authenticator
 ```
   $ php bin/console make:auth
@@ -36,7 +36,15 @@ Generate a form login [How to build a Login Form](https://symfony.com/doc/5.2/se
    created: src/Security/ApiTokenAuthenticator.php
    updated: config/packages/security.yaml
 ```
+Then you have to configure your ApiTokenAuthenticator.
 
+### JSON Login
+To create Api Login Controller [Symfony JSON Login](https://symfony.com/doc/current/security.html#json-login)
+```
+  bin/console make:controller --no-template ApiLogin
+
+  created: src/Controller/ApiLoginController.php
+```
 
 ## Documentation
 
