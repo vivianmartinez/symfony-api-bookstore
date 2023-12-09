@@ -1,7 +1,5 @@
 # Symfony API Rest Bookstore  FOSRestBundle
 
-I'm currently working on this project... 
-
 Project generated with [Symfony CLI](https://symfony.com/download) version 6.3.7 to create API with [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle).
 
 This API let you manage a Bookstore: Get information about books, authors, categories, assign tags. The user must be authorized to make the API call with an Authentication Token.
@@ -17,6 +15,29 @@ This API let you manage a Bookstore: Get information about books, authors, categ
   $ composer require symfony/validator
   $ composer require form
 ```
+### Custom Authentication
+Install symfony security-bundle
+```
+  $ composer require symfony/security-bundle
+```
+Then to create a custom authenticator you can follow the instructions here: [How to write a Custom Authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
+or
+Generate a form login [How to build a Login Form](https://symfony.com/doc/5.2/security/form_login_setup.html) and choose Empty Authenticator
+```
+  $ php bin/console make:auth
+
+  What style of authentication do you want? [Empty authenticator]:
+   [0] Empty authenticator
+   [1] Login form authenticator
+   >
+  The class name of the authenticator to create (e.g. AppCustomAuthenticator):
+   > ApiTokenAuthenticator
+  
+   created: src/Security/ApiTokenAuthenticator.php
+   updated: config/packages/security.yaml
+```
+
+
 ## Documentation
 
 #### POST: Register user
