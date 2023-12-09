@@ -41,11 +41,15 @@ Then you have to configure your ApiTokenAuthenticator.
 ### JSON Login
 To create Api Login Controller [Symfony JSON Login](https://symfony.com/doc/current/security.html#json-login)
 ```
-  bin/console make:controller --no-template ApiLogin
+  $ bin/console make:controller --no-template ApiLogin
 
   created: src/Controller/ApiLoginController.php
 ```
-
+### Integrate Flysystem library to upload files
+[Flysystem-blundle](https://github.com/thephpleague/flysystem-bundle)
+```
+  $ composer require league/flysystem-bundle
+```
 ## Documentation
 
 #### POST: Register user
