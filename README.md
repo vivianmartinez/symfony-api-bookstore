@@ -50,7 +50,7 @@ To create Api Login Controller [Symfony JSON Login](https://symfony.com/doc/curr
 ```
   $ composer require league/flysystem-bundle
 ```
-## Documentation
+## API Documentation
 
 #### POST: Register user
 
@@ -138,7 +138,7 @@ Update book and create tag - to create a new tag send the name:
 
 <img src="/readme-pictures/patch-book-create-tag.png" width="800">
 
-#### PATCH: Update Book - delete tag 
+#### PATCH: Update Book - delete tag from Book
 If you want to delete a tag from a book you can make this request. You must send a json with the tags ids you want to delete.
 ```
   http://127.0.0.1:8000/api/book/12/delete/tags
