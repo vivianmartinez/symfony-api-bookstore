@@ -1,6 +1,6 @@
 # Symfony API Rest Bookstore  FOSRestBundle
 
-Project generated with [Symfony CLI](https://symfony.com/download) version 6.3.7 to create API with [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle).
+Project generated with [Symfony](https://symfony.com/doc/current/setup.html#creating-symfony-applications) version 6.3.7 to create API with [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle). Optionally, you can also install [Symfony CLI](https://symfony.com/download). 
 
 This API let you manage a Bookstore: Get information about books, authors, categories, assign tags. The user must be authorized to make the API call with an Authentication Token.
 
